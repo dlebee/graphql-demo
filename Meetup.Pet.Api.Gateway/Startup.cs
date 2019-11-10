@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using HotChocolate;
 using HotChocolate.AspNetCore;
@@ -13,6 +15,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 
 namespace Meetup.Pet.Api.Gateway
 {
@@ -41,16 +44,26 @@ namespace Meetup.Pet.Api.Gateway
             services.AddHttpClient("Countries", client =>
             {
                 client.BaseAddress = new Uri("https://countries.trevorblades.com/");
-            });        
+            });
+
+            services.AddHttpClient("Strapi", client =>
+            {
+                var token = ResolveStrapiToken().Result;
+                client.BaseAddress = new Uri("http://localhost:1337/graphql");
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            });
 
             services.AddStitchedSchema(builder =>
             {
                 builder.AddSchemaFromHttp("PetQueries"); 
                 builder.AddSchemaFromHttp("PetCommands");
                 builder.AddSchemaFromHttp("Countries");
+                builder.AddSchemaFromHttp("Strapi");
                 builder.AddSchemaConfiguration(c => c
                     .RegisterExtendedScalarTypes()
-                        //.Use<SchemaStitchingAuthorizationMiddleware>()
+                    .RegisterType<JsonScalarType>()
+                    .RegisterType<UploadScalarType>()
+                    //.Use<SchemaStitchingAuthorizationMiddleware>()
                     );
             });
         }
@@ -73,6 +86,37 @@ namespace Meetup.Pet.Api.Gateway
                 .UseGraphiQL("/graphql", "/graphiql")
                 .UsePlayground("/graphql", "/playground")
                 .UseVoyager("/graphql", "/voyager");
+        }
+
+        private string _token = null;
+        private DateTime? _tokenExpiry = null;
+        private async Task<string> ResolveStrapiToken()
+        {
+            if (_token != null && _tokenExpiry > DateTime.Now.AddMinutes(-5))
+                return _token;
+
+            var httpClient = new HttpClient();
+
+            var content = new
+            {
+                identifier = "gateway",
+                password = "gateway12345",
+            };
+
+            var jsonContent = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json");
+
+            var response = await httpClient.PostAsync($"http://localhost:1337/auth/local", jsonContent);
+            if (response.IsSuccessStatusCode)
+            {
+                var rawResponse = await response.Content.ReadAsStringAsync();
+                dynamic authResponse = JsonConvert.DeserializeObject(rawResponse);
+                _token = authResponse.jwt;
+
+                int expiresIn = 60 * 30;
+                _tokenExpiry = DateTime.Now.Add(TimeSpan.FromSeconds(expiresIn));
+            }
+
+            return _token;
         }
     }
 }

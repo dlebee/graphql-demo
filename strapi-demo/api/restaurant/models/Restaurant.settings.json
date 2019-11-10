@@ -1,0 +1,36 @@
+{
+  "connection": "default",
+  "collectionName": "restaurants",
+  "info": {
+    "name": "restaurant",
+    "description": "collection that contains all restaurants"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "comment": ""
+  },
+  "attributes": {
+    "Code": {
+      "type": "string"
+    },
+    "addressLine1": {
+      "type": "string"
+    },
+    "addressLine2": {
+      "type": "string"
+    },
+    "Country": {
+      "type": "string"
+    },
+    "City": {
+      "type": "string"
+    },
+    "PostalCode": {
+      "type": "string"
+    },
+    "Title": {
+      "type": "string"
+    }
+  }
+}

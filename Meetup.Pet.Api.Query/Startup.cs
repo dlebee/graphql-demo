@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,6 +18,7 @@ using MongoDB.Driver;
 
 namespace Meetup.Pet.Api
 {
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
