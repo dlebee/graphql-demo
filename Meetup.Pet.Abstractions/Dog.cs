@@ -1,0 +1,15 @@
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
+
+namespace Meetup.Pet.Api.Queries
+{
+    [BsonIgnoreExtraElements]
+    public class Dog
+    {
+        [BsonId, BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
+        public string Id { get; set; }
+        public string Breed { get; set; }
+        public string Name { get; set; }
+        public DateTime BirthDate { get; set; }
+    }
+}

@@ -11,8 +11,15 @@
     <PackageReference Include="HotChocolate.AspNetCore.PlayGround" Version="10.2.0" />
     <PackageReference Include="HotChocolate.AspNetCore.Voyager" Version="10.2.0" />
     <PackageReference Include="HotChocolate.Subscriptions.InMemory" Version="10.2.0" />
-    <PackageReference Include="AnyClone" Version="1.0.34" />
-    <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
+    <PackageReference Include="MongoDB.Driver" Version="2.9.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Meetup.Pet.Abstractions\Meetup.Pet.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

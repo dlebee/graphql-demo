@@ -7,7 +7,6 @@ using HotChocolate.AspNetCore;
 using HotChocolate.AspNetCore.Voyager;
 using HotChocolate.Execution.Configuration;
 using HotChocolate.Subscriptions;
-using Meetup.Pet.Api.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -16,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
 
 namespace Meetup.Pet.Api
 {
@@ -31,8 +31,14 @@ namespace Meetup.Pet.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<DogRepository>();
-            services.AddSingleton<CatRepository>();
+            services.AddSingleton<IMongoDatabase>(_ =>
+            {
+                var connectionString = Configuration["Mongo:ConnectionString"];
+                var dbName = Configuration["Mongo:Database"];
+                var client = new MongoClient(connectionString);
+                var db = client.GetDatabase(dbName);
+                return db;
+            });
 
             services.AddInMemorySubscriptionProvider();
 
@@ -52,6 +58,8 @@ namespace Meetup.Pet.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 
