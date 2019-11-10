@@ -69,7 +69,7 @@ namespace Meetup.Pet.Api.Gateway
                     .RegisterExtendedScalarTypes()
                     .RegisterType<JsonScalarType>()
                     .RegisterType<UploadScalarType>()
-                    //.Use<SchemaStitchingAuthorizationMiddleware>()
+                    .Use<GatewayAuthorizationMiddleware>()
                     );
             });
         }
