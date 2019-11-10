@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Meetup.Pet.Abstractions", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Meetup.Pet.Api.Gateway", "Meetup.Pet.Api.Gateway\Meetup.Pet.Api.Gateway.csproj", "{31003E05-BD31-4110-B194-94D4D64FD38F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Meetup.Identity", "Meetup.Identity\Meetup.Identity.csproj", "{0C3A4ECC-84F6-47BC-9CFC-590DD85B926A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{31003E05-BD31-4110-B194-94D4D64FD38F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31003E05-BD31-4110-B194-94D4D64FD38F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31003E05-BD31-4110-B194-94D4D64FD38F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C3A4ECC-84F6-47BC-9CFC-590DD85B926A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C3A4ECC-84F6-47BC-9CFC-590DD85B926A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C3A4ECC-84F6-47BC-9CFC-590DD85B926A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C3A4ECC-84F6-47BC-9CFC-590DD85B926A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
