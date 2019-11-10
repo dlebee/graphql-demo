@@ -38,10 +38,16 @@ namespace Meetup.Pet.Api.Gateway
                 client.BaseAddress = new Uri("https://localhost:5003/graphql");
             });
 
+            services.AddHttpClient("Countries", client =>
+            {
+                client.BaseAddress = new Uri("https://countries.trevorblades.com/");
+            });        
+
             services.AddStitchedSchema(builder =>
             {
                 builder.AddSchemaFromHttp("PetQueries"); 
                 builder.AddSchemaFromHttp("PetCommands");
+                builder.AddSchemaFromHttp("Countries");
                 builder.AddSchemaConfiguration(c => c
                     .RegisterExtendedScalarTypes()
                         //.Use<SchemaStitchingAuthorizationMiddleware>()
