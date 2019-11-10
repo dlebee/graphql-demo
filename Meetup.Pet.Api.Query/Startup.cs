@@ -40,6 +40,17 @@ namespace Meetup.Pet.Api
                 return db;
             });
 
+            services.AddCors();
+            services
+                   .AddAuthorization()
+                   .AddAuthentication("Bearer")
+                   .AddJwtBearer("Bearer", options =>
+                   {
+                       options.Authority = "https://localhost:7001";
+                       options.RequireHttpsMetadata = false;
+                       options.Audience = "MeetupApi";
+                   });
+
             services.AddInMemorySubscriptionProvider();
 
             services.AddGraphQL(sp => SchemaBuilder.New()
@@ -60,7 +71,8 @@ namespace Meetup.Pet.Api
             }
 
             app.UseHttpsRedirection();
-
+            app.UseCors(o => o.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            app.UseAuthentication();
             app.UseRouting();
 
             app

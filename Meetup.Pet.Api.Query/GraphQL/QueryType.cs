@@ -1,4 +1,5 @@
-﻿using HotChocolate.Types;
+﻿using HotChocolate.AspNetCore.Authorization;
+using HotChocolate.Types;
 using Meetup.Pet.Api.Queries;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,8 @@ namespace Meetup.Pet.Api
     {
         protected override void Configure(IObjectTypeDescriptor<Query> descriptor)
         {
-            
+            descriptor.Field(t => t.Cats(default, default))
+                .Directive<AuthorizeDirective>();
         }
     }
 }
