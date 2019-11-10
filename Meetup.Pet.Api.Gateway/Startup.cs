@@ -30,6 +30,8 @@ namespace Meetup.Pet.Api.Gateway
             services.AddInMemorySubscriptionProvider();
             services.AddGraphQLSubscriptions();
 
+            services.AddSingleton<StrapiTokenService>();
+
 
             services.AddHttpClient("PetQueries", client =>
             {
@@ -46,9 +48,13 @@ namespace Meetup.Pet.Api.Gateway
                 client.BaseAddress = new Uri("https://countries.trevorblades.com/");
             });
 
-            services.AddHttpClient("Strapi", client =>
+            services.AddHttpClient("Strapi", (sp, client) =>
             {
-                var token = ResolveStrapiToken().Result;
+                var strapiTokenService = sp.GetRequiredService<StrapiTokenService>();
+                var token = strapiTokenService.GetGatewayTokenAsync().Result;
+                if (string.IsNullOrWhiteSpace(token))
+                    throw new Exception("token is required.");
+
                 client.BaseAddress = new Uri("http://localhost:1337/graphql");
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             });
@@ -88,35 +94,6 @@ namespace Meetup.Pet.Api.Gateway
                 .UseVoyager("/graphql", "/voyager");
         }
 
-        private string _token = null;
-        private DateTime? _tokenExpiry = null;
-        private async Task<string> ResolveStrapiToken()
-        {
-            if (_token != null && _tokenExpiry > DateTime.Now.AddMinutes(-5))
-                return _token;
-
-            var httpClient = new HttpClient();
-
-            var content = new
-            {
-                identifier = "gateway",
-                password = "gateway12345",
-            };
-
-            var jsonContent = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json");
-
-            var response = await httpClient.PostAsync($"http://localhost:1337/auth/local", jsonContent);
-            if (response.IsSuccessStatusCode)
-            {
-                var rawResponse = await response.Content.ReadAsStringAsync();
-                dynamic authResponse = JsonConvert.DeserializeObject(rawResponse);
-                _token = authResponse.jwt;
-
-                int expiresIn = 60 * 30;
-                _tokenExpiry = DateTime.Now.Add(TimeSpan.FromSeconds(expiresIn));
-            }
-
-            return _token;
-        }
+        
     }
 }
