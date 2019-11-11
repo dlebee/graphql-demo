@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using HotChocolate;
@@ -27,19 +28,51 @@ namespace Meetup.Pet.Api.Gateway
         {
             services.AddHttpContextAccessor();
             services.AddMemoryCache();
+
+            services.AddCors();
+            services
+                   .AddAuthorization()
+                   .AddAuthentication("Bearer")
+                   .AddJwtBearer("Bearer", options =>
+                   {
+                       options.Authority = "https://localhost:7001";
+                       options.RequireHttpsMetadata = false;
+                       options.Audience = "MeetupApi";
+                   });
+
             services.AddInMemorySubscriptionProvider();
             services.AddGraphQLSubscriptions();
 
             services.AddSingleton<StrapiTokenService>();
 
 
-            services.AddHttpClient("PetQueries", client =>
+            services.AddHttpClient("PetQueries", (sp, client) =>
             {
+                var context = sp.GetRequiredService<IHttpContextAccessor>().HttpContext;
+
+                if (context.Request.Headers.ContainsKey("Authorization"))
+                {
+                    client.DefaultRequestHeaders.Authorization =
+                        AuthenticationHeaderValue.Parse(
+                            context.Request.Headers["Authorization"]
+                                .ToString());
+                }
+
                 client.BaseAddress = new Uri("https://localhost:5001/graphql");
             });
 
-            services.AddHttpClient("PetCommands", client =>
+            services.AddHttpClient("PetCommands", (sp, client) =>
             {
+                var context = sp.GetRequiredService<IHttpContextAccessor>().HttpContext;
+
+                if (context.Request.Headers.ContainsKey("Authorization"))
+                {
+                    client.DefaultRequestHeaders.Authorization =
+                        AuthenticationHeaderValue.Parse(
+                            context.Request.Headers["Authorization"]
+                                .ToString());
+                }
+
                 client.BaseAddress = new Uri("https://localhost:5003/graphql");
             });
 
@@ -82,6 +115,9 @@ namespace Meetup.Pet.Api.Gateway
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHttpsRedirection();
+            app.UseCors(o => o.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            app.UseAuthentication();
             app.UseRouting();
 
             app.UseWebSockets();
