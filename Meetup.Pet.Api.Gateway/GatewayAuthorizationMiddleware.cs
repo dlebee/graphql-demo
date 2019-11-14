@@ -1,5 +1,6 @@
 ﻿using HotChocolate;
 using HotChocolate.Resolvers;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,23 @@ namespace Meetup.Pet.Api.Gateway
             var fieldName = context.Field.Name;
             var objectType = context.ObjectType.Name;
 
-            if (false == await IsAllowed(fieldName, objectType))
+            var contextAccessor = context.Service<IHttpContextAccessor>();
+            if (!contextAccessor.HttpContext.User.Identity.IsAuthenticated)
+            {
+                
+                    
+
+                context.Result = ErrorBuilder.New()
+                    .SetMessage("Forbidden")
+                    .SetCode("503")
+                    .SetPath(context.Path)
+                    .AddLocation(context.FieldSelection)
+                    .Build();
+
+                return;
+            }
+
+            if (fieldName.Value == "PostalCode" && objectType.Value == "Restaurant")
             {
                 context.Result = ErrorBuilder.New()
                     .SetMessage("Forbidden")
@@ -29,14 +46,11 @@ namespace Meetup.Pet.Api.Gateway
                     .SetPath(context.Path)
                     .AddLocation(context.FieldSelection)
                     .Build();
-            }
-            else
-                await _next.Invoke(context);
-        }
 
-        private Task<bool> IsAllowed(NameString fieldName, NameString objectType)
-        {
-            return Task.FromResult(true);
+                return;
+            }
+
+            await _next.Invoke(context);
         }
     }
 }

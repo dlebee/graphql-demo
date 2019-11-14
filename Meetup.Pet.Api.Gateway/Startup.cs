@@ -35,7 +35,7 @@ namespace Meetup.Pet.Api.Gateway
                    .AddAuthentication("Bearer")
                    .AddJwtBearer("Bearer", options =>
                    {
-                       options.Authority = "https://localhost:7001";
+                       options.Authority = "http://localhost:7000";
                        options.RequireHttpsMetadata = false;
                        options.Audience = "MeetupApi";
                    });
@@ -58,7 +58,7 @@ namespace Meetup.Pet.Api.Gateway
                                 .ToString());
                 }
 
-                client.BaseAddress = new Uri("https://localhost:5001/graphql");
+                client.BaseAddress = new Uri("http://localhost:5000/graphql");
             });
 
             services.AddHttpClient("PetCommands", (sp, client) =>
@@ -73,12 +73,12 @@ namespace Meetup.Pet.Api.Gateway
                                 .ToString());
                 }
 
-                client.BaseAddress = new Uri("https://localhost:5003/graphql");
+                client.BaseAddress = new Uri("http://localhost:5002/graphql");
             });
 
             services.AddHttpClient("Countries", client =>
             {
-                client.BaseAddress = new Uri("https://countries.trevorblades.com/");
+                client.BaseAddress = new Uri("http://countries.trevorblades.com/");
             });
 
             services.AddHttpClient("Strapi", (sp, client) =>
@@ -115,7 +115,7 @@ namespace Meetup.Pet.Api.Gateway
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseCors(o => o.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             app.UseAuthentication();
             app.UseRouting();

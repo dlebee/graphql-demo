@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/testomonials",
+      "handler": "Testomonial.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/testomonials/count",
+      "handler": "Testomonial.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/testomonials/:id",
+      "handler": "Testomonial.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/testomonials",
+      "handler": "Testomonial.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/testomonials/:id",
+      "handler": "Testomonial.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/testomonials/:id",
+      "handler": "Testomonial.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

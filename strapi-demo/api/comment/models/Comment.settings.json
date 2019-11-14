@@ -1,0 +1,22 @@
+{
+  "connection": "default",
+  "collectionName": "comments",
+  "info": {
+    "name": "comment",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "comment": ""
+  },
+  "attributes": {
+    "CommentText": {
+      "type": "string"
+    },
+    "testomonial": {
+      "model": "testomonial",
+      "via": "comments"
+    }
+  }
+}

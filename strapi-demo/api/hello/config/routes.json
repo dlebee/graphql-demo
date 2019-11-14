@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/hellos",
+      "handler": "Hello.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hellos/count",
+      "handler": "Hello.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hellos/:id",
+      "handler": "Hello.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hellos",
+      "handler": "Hello.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/hellos/:id",
+      "handler": "Hello.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/hellos/:id",
+      "handler": "Hello.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

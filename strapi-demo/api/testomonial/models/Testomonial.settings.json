@@ -1,0 +1,28 @@
+{
+  "connection": "default",
+  "collectionName": "testomonials",
+  "info": {
+    "name": "testomonial",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": [
+      "created_at",
+      "updated_at"
+    ],
+    "comment": ""
+  },
+  "attributes": {
+    "Author": {
+      "type": "string"
+    },
+    "Content": {
+      "type": "text"
+    },
+    "comments": {
+      "collection": "comment",
+      "via": "testomonial"
+    }
+  }
+}

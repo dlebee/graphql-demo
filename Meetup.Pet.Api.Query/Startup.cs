@@ -46,7 +46,7 @@ namespace Meetup.Pet.Api
                    .AddAuthentication("Bearer")
                    .AddJwtBearer("Bearer", options =>
                    {
-                       options.Authority = "https://localhost:7001";
+                       options.Authority = "http://localhost:7000";
                        options.RequireHttpsMetadata = false;
                        options.Audience = "MeetupApi";
                    });
@@ -70,7 +70,7 @@ namespace Meetup.Pet.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseCors(o => o.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             app.UseAuthentication();
             app.UseRouting();

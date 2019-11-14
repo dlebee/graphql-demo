@@ -1,0 +1,13 @@
+query findAllRestaurant($id: ID!) {
+  restaurant(id: $id) {
+    Code,
+    id
+  }
+}
+
+query getAllRestaurants {
+  restaurants {
+    Code,
+    id
+  }
+}
